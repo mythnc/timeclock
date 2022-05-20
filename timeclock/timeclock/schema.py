@@ -2,6 +2,7 @@ import graphene
 import graphql_jwt
 
 import users.schema
+import clocks.schema
 
 
 class Query(
@@ -11,7 +12,8 @@ class Query(
 
 
 class Mutation(
-    users.schema.Mutation
+    users.schema.Mutation,
+    clocks.schema.Mutation,
 ):
     obtain_token = graphql_jwt.ObtainJSONWebToken.Field()
 
