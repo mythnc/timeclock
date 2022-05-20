@@ -12,8 +12,22 @@ class ClockType(DjangoObjectType):
         model = Clock
 
 
+class CurrentClockType(graphene.ObjectType):
+    clock = graphene.Field(ClockType)
+
+
 class Query(graphene.ObjectType):
-    pass
+    current_clock = graphene.Field(CurrentClockType)
+
+    @login_required
+    def resolve_current_clock(self, info):
+        user = info.context.user
+        try:
+            clock = Clock.objects.filter(user=user, clocked_in__isnull=False, clocked_out__isnull=True).get()
+        except Clock.DoesNotExist as e:
+            return None
+        else:
+            return CurrentClockType(clock=clock)
 
 
 class ClockIn(graphene.Mutation):

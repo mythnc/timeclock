@@ -6,7 +6,8 @@ import clocks.schema
 
 
 class Query(
-    users.schema.Query
+    users.schema.Query,
+    clocks.schema.Query,
 ):
     pass
 
