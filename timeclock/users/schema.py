@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 
 import graphene
 from graphene_django import DjangoObjectType
+from graphql_jwt.decorators import login_required
 
 
 class UserType(DjangoObjectType):
@@ -35,9 +36,6 @@ class Mutation(graphene.ObjectType):
 class Query(graphene.ObjectType):
     me = graphene.Field(UserType)
 
+    @login_required
     def resolve_me(self, info):
-        user = info.context.user
-        if user.is_anonymous:
-            raise Exception('Not logged in!')
-
-        return user
+        return info.context.user
